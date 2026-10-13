@@ -9,12 +9,12 @@ import { ProductsProvider } from './context/ProductsContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <ProductsProvider>
-        <CartProvider>
-          <App />
-        </CartProvider>
-      </ProductsProvider>
-    </BrowserRouter>
-  </StrictMode>
+  <BrowserRouter>
+    <ProductsProvider>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </ProductsProvider>
+  </BrowserRouter>
+</StrictMode>
 );
