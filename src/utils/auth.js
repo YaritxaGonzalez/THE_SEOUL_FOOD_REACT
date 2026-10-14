@@ -40,6 +40,17 @@ export function isValidName(nombre) {
   return nombre.length >= 2 && soloLetras.test(nombre);
 }
 
+// Correo con formato válido (algo@dominio.ext)
+export function isValidEmail(correo) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo.trim());
+}
+
+// Teléfono: entre 8 y 12 dígitos (acepta espacios, +, - y paréntesis)
+export function isValidPhone(telefono) {
+  const digitos = telefono.replace(/[\s+()-]/g, '');
+  return /^\d{8,12}$/.test(digitos);
+}
+
 export function registerUser({ nombre, correo, telefono, pass }) {
   if (isAdminEmail(correo)) {
     return {
