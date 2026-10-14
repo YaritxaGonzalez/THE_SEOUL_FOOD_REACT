@@ -12,6 +12,8 @@ function QuantityControl({ product }) {
   // El admin no compra: no se muestran los botones de agregar al carrito
   if (isAdmin) return null;
 
+  const quantity = getQuantity(product.id);
+
   if (product.stock <= 0) {
     return (
       <div className="qty-slot">

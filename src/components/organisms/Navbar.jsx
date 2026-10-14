@@ -29,6 +29,14 @@ function NavBar() {
               🛒 <Badge bg="danger">{totalItems}</Badge>
             </Button>
           )}
+          <Button
+            variant="outline-light"
+            className="order-lg-last ms-auto ms-lg-2 me-2 me-lg-0"
+            onClick={openCart}
+            aria-label="Abrir carrito"
+          >
+            🛒 <Badge bg="danger">{totalItems}</Badge>
+          </Button>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
