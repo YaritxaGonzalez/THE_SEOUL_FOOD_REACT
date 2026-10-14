@@ -140,13 +140,7 @@ function Register() {
           <Button type="submit" variant="primary" className="w-100 mb-2" disabled={success}>
             Registrarse
           </Button>
-          <Button
-            variant="outline-secondary"
-            className="w-100"
-            onClick={() => navigate('/login')}
-          >
-            Volver al inicio de sesión
-          </Button>
+          
           <Button
             variant="outline-secondary"
             className="w-100 mb-2"
