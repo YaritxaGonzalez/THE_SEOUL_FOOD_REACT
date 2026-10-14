@@ -60,6 +60,9 @@ export function CartProvider({ children }) {
     });
   };
 
+  // Vacía el carrito completo (se usa al pagar)
+  const clearCart = () => setCart({});
+
   const items = Object.entries(cart)
     .map(([id, quantity]) => ({
       product: products.find((p) => p.id === id),
@@ -80,6 +83,7 @@ export function CartProvider({ children }) {
         decreaseItem,
         getQuantity,
         removeItem,
+        clearCart, // <- nueva
         showCart,
         openCart,
         closeCart,
