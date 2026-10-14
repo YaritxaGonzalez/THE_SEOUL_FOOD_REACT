@@ -8,7 +8,7 @@ import { useProducts } from '../context/ProductsContext';
 
 
 function ProductDetail() {
-  const { id } = useParams();
+  const { id} = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { products } = useProducts();
