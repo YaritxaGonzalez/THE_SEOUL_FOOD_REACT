@@ -147,3 +147,53 @@
     50% { color: rgba(255, 105, 180, 1); text-shadow: 0 0 10px rgba(255, 105, 180, 1), 0 0 15px rgba(255, 105, 180, 1); }
     70% { color: white; text-shadow: 0 0 10px white, 0 0 15px white, 0 0 20px white; }
 }
+
+/* ===== HERO NEÓN (Home) ===== */
+.neon-hero {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+    padding: 2rem 1.5rem;
+    border-radius: 24px;
+    background: rgba(5, 5, 10, 0.75);            /* mismo negro azulado de la matriz */
+    backdrop-filter: blur(4px);                  /* suaviza los caracteres de atrás para leer mejor */
+    border: 2px solid rgba(100, 200, 255, 0.9);  /* celeste neón */
+    box-shadow:
+        0 0 10px rgba(0, 150, 255, 0.8),         /* brillo exterior */
+        0 0 30px rgba(0, 150, 255, 0.4),
+        inset 0 0 20px rgba(0, 150, 255, 0.25);  /* brillo interior */
+    animation: hero-glow 4s ease-in-out infinite;
+}
+
+.neon-title {
+    margin: 0 0 0.5rem;
+    color: #fff;
+    text-shadow:
+        0 0 8px rgba(100, 200, 255, 1),
+        0 0 20px rgba(0, 150, 255, 0.9),
+        0 0 40px rgba(255, 105, 180, 0.6);       /* toque rosa, como en el pulso de la matriz */
+}
+
+.neon-subtitle {
+    margin: 0;
+    color: rgba(100, 200, 255, 0.95);
+    text-shadow: 0 0 6px rgba(0, 150, 255, 0.7);
+}
+
+/* El borde pasa de celeste a rosa, igual que smooth-pulse */
+@keyframes hero-glow {
+    0%, 100% {
+        border-color: rgba(100, 200, 255, 0.9);
+        box-shadow: 0 0 10px rgba(0, 150, 255, 0.8), 0 0 30px rgba(0, 150, 255, 0.4),
+                    inset 0 0 20px rgba(0, 150, 255, 0.25);
+    }
+    50% {
+        border-color: rgba(255, 105, 180, 0.9);
+        box-shadow: 0 0 10px rgba(255, 105, 180, 0.8), 0 0 30px rgba(255, 105, 180, 0.4),
+                    inset 0 0 20px rgba(255, 105, 180, 0.25);
+    }
+}
+
+/* Respeta a quien tiene desactivadas las animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) {
+    .neon-hero { animation: none; }
+}
