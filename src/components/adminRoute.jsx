@@ -1,9 +1,10 @@
 import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function AdminRoute({ children }) {
-  const rol = localStorage.getItem('rolActual');
+  const { isAdmin } = useAuth();
 
-  if (rol !== 'admin') {
+  if (!isAdmin) {
     return <Navigate to="/" replace />;
   }
 

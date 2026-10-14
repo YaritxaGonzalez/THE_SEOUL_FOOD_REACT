@@ -6,15 +6,18 @@ import { CartProvider } from './context/CartContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/global.css';
 import { ProductsProvider } from './context/ProductsContext';
+import { AuthProvider } from './context/AuthContext';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <BrowserRouter>
-    <ProductsProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
-    </ProductsProvider>
-  </BrowserRouter>
-</StrictMode>
+    <BrowserRouter>
+      <ProductsProvider>
+        <AuthProvider>
+          <CartProvider>
+            <App />
+          </CartProvider>
+        </AuthProvider>
+      </ProductsProvider>
+    </BrowserRouter>
+  </StrictMode>
 );

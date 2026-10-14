@@ -8,7 +8,7 @@ import { useProducts } from '../context/ProductsContext';
 
 
 function ProductDetail() {
-  const { id } = useParams();
+  const { id} = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { products } = useProducts();
@@ -32,7 +32,10 @@ function ProductDetail() {
         <Card.Body>
           <Text variant="h2">{product.name}</Text>
           <Text variant="p">{product.description}</Text>
-          <Text variant="h4">${product.price.toLocaleString('es-CL')}</Text>
+          <Text variant="h4">
+            <span className="text-success">Precio:</span>{' '}
+            ${product.price.toLocaleString('es-CL')}
+          </Text>
           <Button
             variant="success"
             className="me-2"

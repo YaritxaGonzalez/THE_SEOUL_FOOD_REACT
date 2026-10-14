@@ -16,6 +16,11 @@ function loadCart() {
 export function CartProvider({ children }) {
   const { products } = useProducts();
   const [cart, setCart] = useState(loadCart);
+  const [showCart, setShowCart] = useState(false);
+
+  const openCart = () => setShowCart(true);
+  const closeCart = () => setShowCart(false);
+
   const addToCart = (id) => {
     const product = products.find((p) => p.id === id);
     if (!product) return;
@@ -24,6 +29,7 @@ export function CartProvider({ children }) {
       if (current >= product.stock) return prev;
       return { ...prev, [id]: current + 1 };
     });
+    setShowCart(true);
   };
 
   const decreaseItem = (id) => {
@@ -51,7 +57,17 @@ export function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ items, totalItems, totalPrice, addToCart, decreaseItem, removeItem }}
+      value={{
+        items,
+        totalItems,
+        totalPrice,
+        addToCart,
+        decreaseItem,
+        removeItem,
+        showCart,
+        openCart,
+        closeCart,
+      }}
     >
       {children}
     </CartContext.Provider>

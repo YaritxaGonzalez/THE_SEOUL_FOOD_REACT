@@ -9,21 +9,29 @@ function ProductCard({ product }) {
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
+  const goToDetail = () => navigate(`/products/${product.id}`);
+
   return (
     <Card style={{ width: '18rem' }} className="m-2">
-      <Image src={product.image} alt={product.name} className="card-img-top" />
-      <Card.Body>
-        <CardBody
-          title={product.name}
-          description={product.description}
-          price={product.price}
-        />
-        <Button variant="primary" onClick={() => navigate(`/products/${product.id}`)}>
-          Ver detalles
-        </Button>
+      <div
+        className="card-img-link"
+        role="link"
+        tabIndex={0}
+        title="Ver detalles"
+        onClick={goToDetail}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            goToDetail();
+          }
+        }}
+      >
+        <Image src={product.image} alt={product.name} className="card-img-top" />
+      </div>
+      <Card.Body className="text-center">
+        <CardBody title={product.name} price={product.price} />
         <Button
           variant="success"
-          className="ms-2"
           disabled={product.stock === 0}
           onClick={() => addToCart(product.id)}
         >

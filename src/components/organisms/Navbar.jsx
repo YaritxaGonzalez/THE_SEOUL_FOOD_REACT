@@ -1,15 +1,13 @@
-import { useState } from 'react';
 import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import Image from '../atoms/Image';
 import Button from '../atoms/Button';
 import CartPanel from './CartPanel';
+import AccountMenu from './AccountMenu';
 
 function NavBar() {
-  const [showCart, setShowCart] = useState(false);
-  const { totalItems } = useCart();
-  
+  const { totalItems, showCart, openCart, closeCart } = useCart();
 
   return (
     <>
@@ -24,17 +22,18 @@ function NavBar() {
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">Inicio</Nav.Link>
               <Nav.Link as={Link} to="/products">Productos</Nav.Link>
-              <Nav.Link as={Link} to="/login">Iniciar sesión</Nav.Link>
-              <Nav.Link as={Link} to="/register">Registrarse</Nav.Link>
               <Nav.Link href="#footer">Contacto</Nav.Link>
             </Nav>
-            <Button variant="outline-light" onClick={() => setShowCart(true)}>
+            <Nav className="me-lg-2">
+              <AccountMenu />
+            </Nav>
+            <Button variant="outline-light" onClick={openCart}>
               🛒 <Badge bg="danger">{totalItems}</Badge>
             </Button>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <CartPanel show={showCart} onHide={() => setShowCart(false)} />
+      <CartPanel show={showCart} onHide={closeCart} />
     </>
   );
 }
