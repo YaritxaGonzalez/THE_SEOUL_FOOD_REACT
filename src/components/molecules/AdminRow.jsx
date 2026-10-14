@@ -7,6 +7,10 @@ function AdminRow({ product, onSave, onDelete }) {
   const [price, setPrice] = useState(product.price);
   const [stock, setStock] = useState(product.stock);
 
+  // Valores inválidos: vacío o negativo (no se puede guardar)
+  const priceInvalid = price === '' || Number(price) < 0;
+  const stockInvalid = stock === '' || Number(stock) < 0;
+
   return (
     <tr>
       <td>
@@ -18,6 +22,7 @@ function AdminRow({ product, onSave, onDelete }) {
           type="number"
           min="0"
           value={price}
+          isInvalid={priceInvalid}
           onChange={(e) => setPrice(e.target.value)}
         />
       </td>
@@ -26,11 +31,12 @@ function AdminRow({ product, onSave, onDelete }) {
           type="number"
           min="0"
           value={stock}
+          isInvalid={stockInvalid}
           onChange={(e) => setStock(e.target.value)}
         />
       </td>
       <td className="text-nowrap">
-        <Button size="sm" variant="success" className="me-2" onClick={() => onSave(product.id, price, stock)}>
+        <Button size="sm" variant="success" className="me-2" disabled={priceInvalid || stockInvalid} onClick={() => onSave(product.id, price, stock)}>
           Guardar
         </Button>
         <Button size="sm" variant="danger" onClick={() => onDelete(product.id)}>

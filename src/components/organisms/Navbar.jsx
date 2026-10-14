@@ -1,6 +1,7 @@
 import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import Image from '../atoms/Image';
 import Button from '../atoms/Button';
 import CartPanel from './CartPanel';
@@ -8,6 +9,7 @@ import AccountMenu from './AccountMenu';
 
 function NavBar() {
   const { totalItems, showCart, openCart, closeCart } = useCart();
+  const { isAdmin } = useAuth(); // el admin no compra, así que no ve el carrito
 
   return (
     <>
@@ -17,6 +19,16 @@ function NavBar() {
             <Image src="/imagenes/store-front.png" alt="Logo The Seoul Food" className="logo-nav me-2" />
             The Seoul Food
           </Navbar.Brand>
+          {!isAdmin && (
+            <Button
+              variant="outline-light"
+              className="order-lg-last ms-auto ms-lg-2 me-2 me-lg-0"
+              onClick={openCart}
+              aria-label="Abrir carrito"
+            >
+              🛒 <Badge bg="danger">{totalItems}</Badge>
+            </Button>
+          )}
           <Button
             variant="outline-light"
             className="order-lg-last ms-auto ms-lg-2 me-2 me-lg-0"
@@ -38,7 +50,7 @@ function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <CartPanel show={showCart} onHide={closeCart} />
+      {!isAdmin && <CartPanel show={showCart} onHide={closeCart} />}
     </>
   );
 }

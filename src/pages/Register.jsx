@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Container, Card, Form, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
-import { isValidName, isAdminEmail, registerUser, ADMIN_DOMAIN } from '../utils/auth';
+import { isValidName, isValidEmail, isValidPhone, isAdminEmail, registerUser, ADMIN_DOMAIN } from '../utils/auth';
 
 function Register() {
   const navigate = useNavigate();
@@ -25,8 +25,13 @@ function Register() {
     if (!isValidName(form.nombre.trim())) {
       errs.nombre = 'El nombre solo puede contener letras y espacios (mínimo 2 caracteres).';
     }
-    if (isAdminEmail(form.correo)) {
+    if (!isValidEmail(form.correo)) {
+      errs.correo = 'Ingresa un correo válido (ej: nombre@correo.com).';
+    } else if (isAdminEmail(form.correo)) {
       errs.correo = `Los correos ${ADMIN_DOMAIN} están reservados para el personal de la tienda.`;
+    }
+    if (!isValidPhone(form.telefono)) {
+      errs.telefono = 'Ingresa un teléfono válido (8 a 12 dígitos).';
     }
     if (form.pass.length < 6) {
       errs.pass = 'La contraseña debe tener al menos 6 caracteres.';
@@ -107,8 +112,10 @@ function Register() {
               placeholder="Teléfono"
               value={form.telefono}
               onChange={handleChange}
+              isInvalid={!!errors.telefono}
               required
             />
+            <Form.Control.Feedback type="invalid">{errors.telefono}</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -140,7 +147,7 @@ function Register() {
           <Button type="submit" variant="primary" className="w-100 mb-2" disabled={success}>
             Registrarse
           </Button>
-          
+          {/* Un solo botón de volver (antes estaba repetido) */}
           <Button
             variant="outline-secondary"
             className="w-100 mb-2"

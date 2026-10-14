@@ -17,6 +17,11 @@ function cleanStock(value) {
   return Math.max(0, Math.floor(Number(value)) || 0);
 }
 
+// Evita precio negativo, decimal o vacío
+function cleanPrice(value) {
+  return Math.max(0, Math.round(Number(value)) || 0);
+}
+
 function write(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
@@ -36,9 +41,9 @@ export function loadCatalog() {
 export function createProduct({ name, image, price, description, stock }) {
   const product = {
     id: 'ADM-' + Date.now(),
-    name,
+    name: String(name).trim(),
     image,
-    price: Number(price),
+    price: cleanPrice(price),
     description,
     stock: cleanStock(stock),
   };
@@ -47,6 +52,7 @@ export function createProduct({ name, image, price, description, stock }) {
 }
 
 export function saveEdit(id, price, stock) {
+  const values = { price: cleanPrice(price), stock: cleanStock(stock) };
   const values = { price: Number(price), stock: cleanStock(stock) };
   if (String(id).startsWith('ADM-')) {
     write(

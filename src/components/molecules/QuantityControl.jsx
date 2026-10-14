@@ -1,10 +1,17 @@
 import Button from '../atoms/Button';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 
 // Muestra "Agregar" si el producto no está en el carrito,
 // y un selector  −  cantidad  +  si ya hay unidades agregadas.
 function QuantityControl({ product }) {
   const { getQuantity, addToCart, decreaseItem } = useCart();
+  const { isAdmin } = useAuth();
+  const quantity = getQuantity(product.id);
+
+  // El admin no compra: no se muestran los botones de agregar al carrito
+  if (isAdmin) return null;
+
   const quantity = getQuantity(product.id);
 
   if (product.stock <= 0) {

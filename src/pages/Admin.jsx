@@ -10,6 +10,7 @@ function Admin() {
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
   const [form, setForm] = useState(EMPTY_FORM);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,6 +19,22 @@ function Admin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const image = form.image.trim();
+
+    // Validaciones antes de crear el producto
+    if (form.name.trim().length < 2) {
+      setError('El nombre del producto debe tener al menos 2 caracteres.');
+      return;
+    }
+    if (image === '') {
+      setError('Ingresa la ruta de la imagen.');
+      return;
+    }
+    if (Number(form.price) < 0 || Number(form.stock) < 0) {
+      setError('El precio y el stock no pueden ser negativos.');
+      return;
+    }
+    setError('');
+
     addProduct({
       ...form,
       name: form.name.trim(),
@@ -41,7 +58,14 @@ function Admin() {
 
   return (
     <Container className="my-5">
-      <h1>Panel de administración</h1>
+      {/* text-white = texto blanco */}
+      <h1 className="text-white">Panel de administración</h1>
+
+      {error && (
+        <Alert variant="danger" dismissible onClose={() => setError('')}>
+          {error}
+        </Alert>
+      )}
 
       {message && (
         <Alert variant="success" dismissible onClose={() => setMessage('')}>
