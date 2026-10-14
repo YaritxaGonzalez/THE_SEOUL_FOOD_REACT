@@ -53,7 +53,6 @@ export function createProduct({ name, image, price, description, stock }) {
 
 export function saveEdit(id, price, stock) {
   const values = { price: cleanPrice(price), stock: cleanStock(stock) };
-  const values = { price: Number(price), stock: cleanStock(stock) };
   if (String(id).startsWith('ADM-')) {
     write(
       ADDED_KEY,

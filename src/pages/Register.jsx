@@ -147,7 +147,6 @@ function Register() {
           <Button type="submit" variant="primary" className="w-100 mb-2" disabled={success}>
             Registrarse
           </Button>
-          {/* Un solo botón de volver (antes estaba repetido) */}
           <Button
             variant="outline-secondary"
             className="w-100 mb-2"
