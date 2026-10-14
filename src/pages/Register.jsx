@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Container, Card, Form, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../components/atoms/Button';
-import { isValidName, registerUser } from '../utils/auth';
+import { isValidName, isAdminEmail, registerUser, ADMIN_DOMAIN } from '../utils/auth';
 
 function Register() {
   const navigate = useNavigate();
@@ -25,6 +25,9 @@ function Register() {
     if (!isValidName(form.nombre.trim())) {
       errs.nombre = 'El nombre solo puede contener letras y espacios (mínimo 2 caracteres).';
     }
+    if (isAdminEmail(form.correo)) {
+      errs.correo = `Los correos ${ADMIN_DOMAIN} están reservados para el personal de la tienda.`;
+    }
     if (form.pass.length < 6) {
       errs.pass = 'La contraseña debe tener al menos 6 caracteres.';
     }
@@ -33,7 +36,6 @@ function Register() {
     }
     return errs;
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const errs = validate();
@@ -56,16 +58,20 @@ function Register() {
 
     setErrors({});
     setSuccess(true);
-    setTimeout(() => navigate('/'), 1500);
+    setTimeout(() => navigate('/login'), 1500);
   };
 
   return (
-    <Container className="my-5">
-      <Card style={{ maxWidth: '26rem' }} className="mx-auto p-4">
+    <Container className="min-vh-100 d-flex align-items-center justify-content-center py-5">
+      <Card style={{ maxWidth: '26rem', width: '100%' }} className="p-4">
         <h1 className="h3">Crear cuenta</h1>
         <p>Regístrate para pedir tus productos favoritos.</p>
 
-        {success && <Alert variant="success">✅ ¡Registro exitoso! Redirigiendo al inicio...</Alert>}
+        {success && (
+          <Alert variant="success">
+            ✅ ¡Registro exitoso! Redirigiendo al inicio de sesión...
+          </Alert>
+        )}
 
         <Form onSubmit={handleSubmit} noValidate>
           <Form.Group className="mb-3">
@@ -134,8 +140,26 @@ function Register() {
           <Button type="submit" variant="primary" className="w-100 mb-2" disabled={success}>
             Registrarse
           </Button>
-          <Button variant="outline-secondary" className="w-100" onClick={() => navigate('/')}>
-            Volver al inicio
+          <Button
+            variant="outline-secondary"
+            className="w-100"
+            onClick={() => navigate('/login')}
+          >
+            Volver al inicio de sesión
+          </Button>
+          <Button
+            variant="outline-secondary"
+            className="w-100 mb-2"
+            onClick={() => navigate('/login')}
+          >
+            Volver al inicio de sesión
+          </Button>
+          <Button
+            variant="link"
+            className="w-100"
+            onClick={() => navigate('/')}
+          >
+            Continuar sin registrarme
           </Button>
         </Form>
 

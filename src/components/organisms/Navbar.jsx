@@ -5,11 +5,11 @@ import { useCart } from '../../context/CartContext';
 import Image from '../atoms/Image';
 import Button from '../atoms/Button';
 import CartPanel from './CartPanel';
+import AccountMenu from './AccountMenu';
 
 function NavBar() {
   const [showCart, setShowCart] = useState(false);
   const { totalItems } = useCart();
-  
 
   return (
     <>
@@ -24,9 +24,10 @@ function NavBar() {
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">Inicio</Nav.Link>
               <Nav.Link as={Link} to="/products">Productos</Nav.Link>
-              <Nav.Link as={Link} to="/login">Iniciar sesión</Nav.Link>
-              <Nav.Link as={Link} to="/register">Registrarse</Nav.Link>
               <Nav.Link href="#footer">Contacto</Nav.Link>
+            </Nav>
+            <Nav className="me-lg-2">
+              <AccountMenu />
             </Nav>
             <Button variant="outline-light" onClick={() => setShowCart(true)}>
               🛒 <Badge bg="danger">{totalItems}</Badge>

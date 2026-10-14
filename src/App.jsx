@@ -11,12 +11,17 @@ import AdminRoute from './components/AdminRoute';
 function App() {
   return (
     <Routes>
+      {/* Pantallas de acceso (opcionales) */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {/* Tienda pública: se puede ver sin cuenta */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+
+        {/* Solo el administrador */}
         <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
       </Route>
     </Routes>

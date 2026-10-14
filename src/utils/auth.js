@@ -1,10 +1,23 @@
 const USERS_KEY = 'usuariosRegistrados';
 
-const ADMIN = {
-  user: 'admin@theseoulfood.cl',
-  pass: 'SoulFood2026Adm!',
-  rol: 'admin',
-};
+// Dominio reservado: solo los administradores pueden usarlo
+export const ADMIN_DOMAIN = '@theseoulfood.cl';
+
+// Lista de administradores (puedes agregar más)
+const ADMINS = [
+  {
+    user: 'admin@theseoulfood.cl',
+    pass: 'SoulFood2026Adm!',
+    rol: 'admin',
+    nombre: 'Administrador',
+  },
+  // {
+  //   user: 'otro.admin@theseoulfood.cl',
+  //   pass: 'OtraClave2026!',
+  //   rol: 'admin',
+  //   nombre: 'Otro Admin',
+  // },
+];
 
 function getRegistered() {
   try {
@@ -15,7 +28,11 @@ function getRegistered() {
 }
 
 export function getUsers() {
-  return [ADMIN, ...getRegistered()];
+  return [...ADMINS, ...getRegistered()];
+}
+
+export function isAdminEmail(correo) {
+  return correo.trim().toLowerCase().endsWith(ADMIN_DOMAIN);
 }
 
 export function isValidName(nombre) {
@@ -24,6 +41,12 @@ export function isValidName(nombre) {
 }
 
 export function registerUser({ nombre, correo, telefono, pass }) {
+  if (isAdminEmail(correo)) {
+    return {
+      ok: false,
+      error: `Los correos ${ADMIN_DOMAIN} están reservados para el personal de la tienda`,
+    };
+  }
   if (getUsers().some((u) => u.user === correo)) {
     return { ok: false, error: 'Ya existe una cuenta registrada con ese correo' };
   }
@@ -33,10 +56,27 @@ export function registerUser({ nombre, correo, telefono, pass }) {
   return { ok: true };
 }
 
-export function login(correo, pass) {
-  const found = getUsers().find((u) => u.user === correo && u.pass === pass);
+// "rol" es el perfil elegido en la pantalla de acceso ('cliente' o 'admin')
+export function login(correo, pass, rol) {
+  const found = getUsers().find(
+    (u) => u.user === correo && u.pass === pass && (!rol || u.rol === rol)
+  );
   if (!found) return null;
-  localStorage.setItem('rolActual', found.rol);
-  localStorage.setItem('userActual', found.user);
+  sessionStorage.setItem('rolActual', found.rol);
+  sessionStorage.setItem('userActual', found.user);
+  sessionStorage.setItem('nombreActual', found.nombre || '');
   return found;
+}
+
+export function getSession() {
+  const user = sessionStorage.getItem('userActual');
+  const rol = sessionStorage.getItem('rolActual');
+  if (!user || !rol) return null;
+  return { user, rol, nombre: sessionStorage.getItem('nombreActual') || '' };
+}
+
+export function logout() {
+  sessionStorage.removeItem('rolActual');
+  sessionStorage.removeItem('userActual');
+  sessionStorage.removeItem('nombreActual');
 }
