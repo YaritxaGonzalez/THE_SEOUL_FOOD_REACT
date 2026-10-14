@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Navbar, Nav, Container, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
@@ -8,8 +7,7 @@ import CartPanel from './CartPanel';
 import AccountMenu from './AccountMenu';
 
 function NavBar() {
-  const [showCart, setShowCart] = useState(false);
-  const { totalItems } = useCart();
+  const { totalItems, showCart, openCart, closeCart } = useCart();
 
   return (
     <>
@@ -29,13 +27,13 @@ function NavBar() {
             <Nav className="me-lg-2">
               <AccountMenu />
             </Nav>
-            <Button variant="outline-light" onClick={() => setShowCart(true)}>
+            <Button variant="outline-light" onClick={openCart}>
               🛒 <Badge bg="danger">{totalItems}</Badge>
             </Button>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <CartPanel show={showCart} onHide={() => setShowCart(false)} />
+      <CartPanel show={showCart} onHide={closeCart} />
     </>
   );
 }
