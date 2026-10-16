@@ -25,6 +25,7 @@ module.exports = function (config) {
               },
             },
             // El proyecto usa "type": "module": permite imports sin extensión
+            // (por ejemplo '../data/products' dentro de utils/catalog.js)
             resolve: { fullySpecified: false },
           },
           {

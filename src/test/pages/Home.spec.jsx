@@ -1,4 +1,4 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, within } from '@testing-library/react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '../../pages/Home';
 import { renderApp, resetStorage } from '../test-utils';
@@ -15,8 +15,8 @@ describe('Home', () => {
   });
 
   it('incluye el carrusel con 6 productos', () => {
-    renderApp(<Home />);
-    expect(screen.getAllByRole('link').length).toBe(6);
+    const { container } = renderApp(<Home />);
+    expect(within(container).getAllByRole('link').length).toBe(6);
   });
 
   it('el botón Ver productos navega a la pantalla de productos', () => {

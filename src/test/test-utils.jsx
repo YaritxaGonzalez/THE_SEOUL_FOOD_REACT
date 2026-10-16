@@ -4,7 +4,6 @@ import { ProductsProvider } from '../context/ProductsContext';
 import { AuthProvider } from '../context/AuthContext';
 import { CartProvider } from '../context/CartContext';
 
-// Limpia el almacenamiento antes de cada prueba
 export function resetStorage() {
   localStorage.clear();
   sessionStorage.clear();
