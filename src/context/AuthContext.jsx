@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
         session,
         isLoggedIn: !!session,
         isAdmin: session?.rol === 'admin',
+        isSeller: session?.rol ===  'vendedor',
         login,
         logout,
       }}

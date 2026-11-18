@@ -7,6 +7,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
 import AdminRoute from './routes/AdminRoute';
+import Orders from './pages/Orders';
+import OrderDetail from './pages/OrderDetail';
+import RoleRoute from './routes/RoleRoute';
 
 function App() {
   return (
@@ -23,6 +26,8 @@ function App() {
 
         {/* Solo el administrador */}
         <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+        <Route path="/orders" element={<RoleRoute roles={['admin', 'vendedor']}><Orders /></RoleRoute>} />
+        <Route path="/orders/:id" element={<RoleRoute roles={['admin', 'vendedor']}><OrderDetail /></RoleRoute>} />
       </Route>
     </Routes>
   );

@@ -29,7 +29,7 @@ function ProductCard({ product }) {
       </Text>
       <Card.Body className="text-center d-flex flex-column">
         <CardBody title={product.name} price={product.price} />
-        <Text className="mt-auto">
+        <Text variant="div" className="mt-auto">
           <QuantityControl product={product} />
         </Text>
       </Card.Body>

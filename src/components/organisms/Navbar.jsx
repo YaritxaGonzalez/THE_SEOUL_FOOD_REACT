@@ -9,17 +9,17 @@ import AccountMenu from './AccountMenu';
 
 function NavBar() {
   const { totalItems, showCart, openCart, closeCart } = useCart();
-  const { isAdmin } = useAuth(); // el admin no compra, así que no ve el carrito
-
+  const { isAdmin, isSeller } = useAuth(); // el admin no compra, así que no ve el carrito
+  const canBuy = !isAdmin && !isSeller; // solo el cliente (o visitante) compraconst canBuy = !isAdmin && !isSeller; // solo el cliente (o visitante) compra
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">
         <Container>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to={isSeller ? '/products' : '/'}>
             <Image src="/imagenes/store-front.png" alt="Logo The Seoul Food" className="logo-nav me-2" />
             The Seoul Food
           </Navbar.Brand>
-          {!isAdmin && (
+          {canBuy && (
             <Button
               variant="outline-light"
               className="order-lg-last ms-auto ms-lg-2 me-2 me-lg-0"
@@ -32,9 +32,10 @@ function NavBar() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/">Inicio</Nav.Link>
+              {!isSeller && <Nav.Link as={Link} to="/">Inicio</Nav.Link>}
               <Nav.Link as={Link} to="/products">Productos</Nav.Link>
-              <Nav.Link href="#footer">Contacto</Nav.Link>
+              {(isAdmin || isSeller) && <Nav.Link as={Link} to="/orders">Órdenes</Nav.Link>}
+              {!isSeller && <Nav.Link href="#footer">Contacto</Nav.Link>}
             </Nav>
             <Nav className="me-lg-2">
               <AccountMenu />
@@ -42,7 +43,7 @@ function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {!isAdmin && <CartPanel show={showCart} onHide={closeCart} />}
+      {canBuy && <CartPanel show={showCart} onHide={closeCart} />}
     </>
   );
 }

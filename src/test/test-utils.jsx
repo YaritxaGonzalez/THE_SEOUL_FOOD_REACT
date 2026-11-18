@@ -4,6 +4,12 @@ import { ProductsProvider } from '../context/ProductsContext';
 import { AuthProvider } from '../context/AuthContext';
 import { CartProvider } from '../context/CartContext';
 
+const CORREOS = {
+  admin: 'admin@theseoulfood.cl',
+  vendedor: 'vendedor@theseoulfood.cl',
+  cliente: 'cliente@correo.cl',
+};
+
 export function resetStorage() {
   localStorage.clear();
   sessionStorage.clear();
@@ -12,10 +18,7 @@ export function resetStorage() {
 // Simula una sesión iniciada ('admin' o 'cliente')
 export function loginAs(rol) {
   sessionStorage.setItem('rolActual', rol);
-  sessionStorage.setItem(
-    'userActual',
-    rol === 'admin' ? 'admin@theseoulfood.cl' : 'cliente@correo.cl'
-  );
+  sessionStorage.setItem('userActual', CORREOS[rol]);
   sessionStorage.setItem('nombreActual', rol);
 }
 
