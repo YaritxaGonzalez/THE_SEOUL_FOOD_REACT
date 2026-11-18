@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Text from '../atoms/Text';
 
 const CARACTERES_COREANOS = [
     '가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타', '파', '하',
@@ -32,11 +33,11 @@ function MatrixBackground() {
     }, []);
 
     return (
-        <div className="jp-matrix" aria-hidden="true">
+        <Text variant="div" className="jp-matrix" aria-hidden="true">
             {caracteres.map((c, i) => (
-                <span key={i}>{c}</span>
+                <Text variant="span" key={i}>{c}</Text>
             ))}
-        </div>
+        </Text>
     );
 }
 

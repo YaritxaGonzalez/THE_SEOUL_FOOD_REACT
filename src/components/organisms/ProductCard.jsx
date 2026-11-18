@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Image from '../atoms/Image';
 import CardBody from '../molecules/CardBody';
 import QuantityControl from '../molecules/QuantityControl';
+import Text from '../atoms/Text';
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ function ProductCard({ product }) {
 
   return (
     <Card className="product-card">
-      <div
+      <Text
         className="card-img-link"
         role="link"
         tabIndex={0}
@@ -25,12 +26,12 @@ function ProductCard({ product }) {
         }}
       >
         <Image src={product.image} alt={product.name} className="card-img-top product-img" />
-      </div>
+      </Text>
       <Card.Body className="text-center d-flex flex-column">
         <CardBody title={product.name} price={product.price} />
-        <div className="mt-auto">
+        <Text className="mt-auto">
           <QuantityControl product={product} />
-        </div>
+        </Text>
       </Card.Body>
     </Card>
   );
