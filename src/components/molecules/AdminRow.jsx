@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Form } from 'react-bootstrap';
 import Image from '../atoms/Image';
 import Button from '../atoms/Button';
+import Input from '../atoms/Input';
+import Table from '../atoms/Table';
 
 function AdminRow({ product, onSave, onDelete }) {
   const [price, setPrice] = useState(product.price);
@@ -12,38 +13,38 @@ function AdminRow({ product, onSave, onDelete }) {
   const stockInvalid = stock === '' || Number(stock) < 0;
 
   return (
-    <tr>
-      <td>
+    <Table.Row>
+      <Table.Cell>
         <Image src={product.image} alt={product.name} className="admin-thumb" />
-      </td>
-      <td>{product.name}</td>
-      <td>
-        <Form.Control
+      </Table.Cell>
+      <Table.Cell>{product.name}</Table.Cell>
+      <Table.Cell>
+        <Input
           type="number"
           min="0"
           value={price}
           isInvalid={priceInvalid}
           onChange={(e) => setPrice(e.target.value)}
         />
-      </td>
-      <td>
-        <Form.Control
+      </Table.Cell>
+      <Table.Cell>
+        <Input
           type="number"
           min="0"
           value={stock}
           isInvalid={stockInvalid}
           onChange={(e) => setStock(e.target.value)}
         />
-      </td>
-      <td className="text-nowrap">
+      </Table.Cell>
+      <Table.Cell className="text-nowrap">
         <Button size="sm" variant="success" className="me-2" disabled={priceInvalid || stockInvalid} onClick={() => onSave(product.id, price, stock)}>
           Guardar
         </Button>
         <Button size="sm" variant="danger" onClick={() => onDelete(product.id)}>
           Eliminar
         </Button>
-      </td>
-    </tr>
+      </Table.Cell>
+    </Table.Row>
   );
 }
 

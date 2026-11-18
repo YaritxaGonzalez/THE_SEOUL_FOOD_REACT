@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProducts } from '../../context/ProductsContext';
+import Text from '../atoms/Text';
+import PlainButton from '../atoms/PlainButton';
 
 const INTERVAL = 2500;
 
@@ -26,15 +28,16 @@ function ProductCarousel({ limit = 6 }) {
     if (total === 0) return null;
 
     return (
-        <div id="carrusel">
-            <div className="carrusel-container">
-                <button type="button" className="carrusel-arrow" onClick={() => goTo(current - 1)} aria-label="Anterior">
+        <Text variant="div" id="carrusel">
+            <Text variant="div" className="carrusel-container">
+                <PlainButton className="carrusel-arrow" onClick={() => goTo(current - 1)} aria-label="Anterior">
                     ‹
-                </button>
+                </PlainButton>
 
-                <div className="carrusel-track">
+                <Text variant="div" className="carrusel-track">
                     {slides.map((p, i) => (
-                        <div
+                        <Text
+                            variant="div"
                             key={p.id}
                             className={`carrusel-slide ${i === current ? 'a' : ''}`}
                             style={{ backgroundImage: `url(${p.image})` }}
@@ -43,24 +46,25 @@ function ProductCarousel({ limit = 6 }) {
                             onClick={() => navigate(`/products/${p.id}`)}
                         />
                     ))}
-                </div>
+                </Text>
 
-                <button type="button" className="carrusel-arrow" onClick={() => goTo(current + 1)} aria-label="Siguiente">
+                <PlainButton className="carrusel-arrow" onClick={() => goTo(current + 1)} aria-label="Siguiente">
                     ›
-                </button>
-            </div>
+                </PlainButton>
+            </Text>
 
-            <ul className="slide">
+            <Text variant="ul" className="slide">
                 {slides.map((p, i) => (
-                    <li
+                    <Text
+                        variant="li"
                         key={p.id}
                         className={i === current ? 'b' : ''}
                         onClick={() => goTo(i)}
                         aria-label={`Ir a ${p.name}`}
                     />
                 ))}
-            </ul>
-        </div>
+            </Text>
+        </Text>
     );
 }
 

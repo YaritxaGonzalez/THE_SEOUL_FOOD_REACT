@@ -3,6 +3,7 @@ import { NavDropdown, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../atoms/Button';
+import Text from '../atoms/Text';
 
 function AccountMenu() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const label = isLoggedIn ? '👤 Mi cuenta' : '👤 Cuenta';
             <NavDropdown.ItemText className="small text-secondary">
               Sesión iniciada como
               <br />
-              <strong className="text-light">{session.user}</strong>
+              <Text variant="strong" className="text-light">{session.user}</Text>
             </NavDropdown.ItemText>
             <NavDropdown.Divider />
             {isAdmin && (

@@ -6,7 +6,7 @@ import ProductDetail from './pages/ProductDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
-import AdminRoute from './components/adminRoute';
+import AdminRoute from './routes/AdminRoute';
 
 function App() {
   return (

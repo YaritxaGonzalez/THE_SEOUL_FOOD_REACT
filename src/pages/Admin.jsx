@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Container, Tabs, Tab, Table, Form, Alert } from 'react-bootstrap';
+import { Container, Tabs, Tab, Alert } from 'react-bootstrap';
 import { useProducts } from '../context/ProductsContext';
-import AdminRow from '../components/molecules/AdminRow';
-import Button from '../components/atoms/Button';
+import Text from '../components/atoms/Text';
+import StockTable from '../components/organisms/StockTable';
+import ProductForm from '../components/organisms/ProductForm';
 
 const EMPTY_FORM = { name: '', image: '', price: '', stock: '', description: '' };
 
@@ -58,8 +59,7 @@ function Admin() {
 
   return (
     <Container className="my-5">
-      {/* text-white = texto blanco */}
-      <h1 className="text-white">Panel de administración</h1>
+      <Text variant="h1" className="text-white">Panel de administración</Text>
 
       {error && (
         <Alert variant="danger" dismissible onClose={() => setError('')}>
@@ -75,43 +75,11 @@ function Admin() {
 
       <Tabs defaultActiveKey="stock" className="mb-3">
         <Tab eventKey="stock" title="Stock">
-          <Table responsive hover className="align-middle">
-            <thead>
-              <tr>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((p) => (
-                <AdminRow key={p.id} product={p} onSave={handleSave} onDelete={handleDelete} />
-              ))}
-            </tbody>
-          </Table>
+          <StockTable products={products} onSave={handleSave} onDelete={handleDelete} />
         </Tab>
 
         <Tab eventKey="producto" title="Producto">
-          <Form onSubmit={handleSubmit} style={{ maxWidth: '28rem' }}>
-            <Form.Group className="mb-3">
-              <Form.Control name="name" placeholder="Nombre del producto" value={form.name} onChange={handleChange} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control name="image" placeholder="Ruta de la imagen (ej: /imagenes/nuevo.webp)" value={form.image} onChange={handleChange} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control type="number" min="0" name="price" placeholder="Precio" value={form.price} onChange={handleChange} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control type="number" min="0" name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} required />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Control name="description" placeholder="Descripción" value={form.description} onChange={handleChange} />
-            </Form.Group>
-            <Button type="submit" variant="primary">Agregar producto</Button>
-          </Form>
+          <ProductForm form={form} onChange={handleChange} onSubmit={handleSubmit} />
         </Tab>
       </Tabs>
     </Container>

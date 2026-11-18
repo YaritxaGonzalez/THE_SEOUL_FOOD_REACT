@@ -1,8 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { screen } from '@testing-library/react';
-import AdminRoute from '../../components/adminRoute';
+import AdminRoute from '../../routes/AdminRoute';
 import { renderApp, resetStorage, loginAs } from '../test-utils';
-
 const rutas = (
   <Routes>
     <Route path="/" element={<p>Página de inicio</p>} />

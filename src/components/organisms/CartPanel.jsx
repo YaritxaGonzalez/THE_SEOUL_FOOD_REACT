@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Offcanvas, ListGroup, Alert, Form } from 'react-bootstrap';
+import { Offcanvas, ListGroup, Alert } from 'react-bootstrap';
 import { useCart } from '../../context/CartContext';
-import Image from '../atoms/Image';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button';
+import CartItem from '../molecules/CartItem';
+import PaymentForm from './PaymentForm';
 
 const EMPTY_FORM = { nombre: '', tarjeta: '', vencimiento: '', cvv: '' };
 
@@ -103,32 +104,22 @@ function CartPanel({ show, onHide }) {
             ) : (
               <ListGroup variant="flush">
                 {items.map(({ product, quantity }) => (
-                  <ListGroup.Item key={product.id} className="d-flex align-items-center gap-2">
-                    <Image src={product.image} alt={product.name} className="cart-img" />
-                    <div className="flex-grow-1">
-                      <div>{product.name}</div>
-                      <small>${(product.price * quantity).toLocaleString('es-CL')}</small>
-                    </div>
-                    <Button size="sm" variant="outline-secondary" onClick={() => decreaseItem(product.id)}>-</Button>
-                    <span>{quantity}</span>
-                    <Button
-                      size="sm"
-                      variant="outline-secondary"
-                      disabled={quantity >= product.stock}
-                      onClick={() => addToCart(product.id)}
-                    >
-                      +
-                    </Button>
-                    <Button size="sm" variant="outline-danger" onClick={() => removeItem(product.id)}>✕</Button>
-                  </ListGroup.Item>
+                  <CartItem
+                    key={product.id}
+                    product={product}
+                    quantity={quantity}
+                    onDecrease={() => decreaseItem(product.id)}
+                    onIncrease={() => addToCart(product.id)}
+                    onRemove={() => removeItem(product.id)}
+                  />
                 ))}
               </ListGroup>
             )}
             <hr />
-            <div className="d-flex justify-content-between fw-bold">
-              <span>Total:</span>
-              <span>${totalPrice.toLocaleString('es-CL')}</span>
-            </div>
+            <Text variant="div" className="d-flex justify-content-between fw-bold">
+              <Text variant="span">Total:</Text>
+              <Text variant="span">${totalPrice.toLocaleString('es-CL')}</Text>
+            </Text>
 
             {/* Lleva al formulario de pago (no paga todavía) */}
             <Button
@@ -143,68 +134,14 @@ function CartPanel({ show, onHide }) {
         )}
 
         {step === 'payment' && (
-          <Form onSubmit={handlePay} noValidate>
-            <p className="fw-bold">Total a pagar: ${totalPrice.toLocaleString('es-CL')}</p>
-
-            <Form.Group className="mb-3">
-              <Form.Control
-                name="nombre"
-                placeholder="Nombre del titular"
-                value={form.nombre}
-                onChange={handleChange}
-                isInvalid={!!errors.nombre}
-              />
-              <Form.Control.Feedback type="invalid">{errors.nombre}</Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Control
-                name="tarjeta"
-                placeholder="Número de tarjeta (16 dígitos)"
-                maxLength={16}
-                inputMode="numeric"
-                value={form.tarjeta}
-                onChange={handleChange}
-                isInvalid={!!errors.tarjeta}
-              />
-              <Form.Control.Feedback type="invalid">{errors.tarjeta}</Form.Control.Feedback>
-            </Form.Group>
-
-            <div className="d-flex gap-2">
-              <Form.Group className="mb-3 flex-grow-1">
-                <Form.Control
-                  name="vencimiento"
-                  placeholder="MM/AA"
-                  maxLength={5}
-                  value={form.vencimiento}
-                  onChange={handleChange}
-                  isInvalid={!!errors.vencimiento}
-                />
-                <Form.Control.Feedback type="invalid">{errors.vencimiento}</Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group className="mb-3 flex-grow-1">
-                <Form.Control
-                  name="cvv"
-                  type="password"
-                  placeholder="CVV"
-                  maxLength={3}
-                  inputMode="numeric"
-                  value={form.cvv}
-                  onChange={handleChange}
-                  isInvalid={!!errors.cvv}
-                />
-                <Form.Control.Feedback type="invalid">{errors.cvv}</Form.Control.Feedback>
-              </Form.Group>
-            </div>
-
-            <Button type="submit" variant="success" className="w-100 mb-2">
-              Pagar
-            </Button>
-            <Button variant="outline-secondary" className="w-100" onClick={() => setStep('cart')}>
-              Volver al carrito
-            </Button>
-          </Form>
+          <PaymentForm
+            form={form}
+            errors={errors}
+            totalPrice={totalPrice}
+            onChange={handleChange}
+            onSubmit={handlePay}
+            onBack={() => setStep('cart')}
+          />
         )}
       </Offcanvas.Body>
     </Offcanvas>

@@ -1,4 +1,5 @@
 import Button from '../atoms/Button';
+import Text from '../atoms/Text';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 
@@ -14,29 +15,29 @@ function QuantityControl({ product }) {
 
   if (product.stock <= 0) {
     return (
-      <div className="qty-slot">
+      <Text variant="div" className="qty-slot">
         <Button variant="secondary" disabled>Sin stock</Button>
-      </div>
+      </Text>
     );
   }
 
   if (quantity === 0) {
     return (
-      <div className="qty-slot">
+      <Text variant="div" className="qty-slot">
         <Button variant="success" onClick={() => addToCart(product.id)}>Agregar</Button>
-      </div>
+      </Text>
     );
   }
 
   const atMax = quantity >= product.stock;
 
   return (
-    <div className="qty-slot">
-      <div className="qty-control" role="group" aria-label={`Cantidad de ${product.name}`}>
+    <Text variant="div" className="qty-slot">
+      <Text variant="div" className="qty-control" role="group" aria-label={`Cantidad de ${product.name}`}>
         <Button variant="outline-success" aria-label="Quitar una unidad" onClick={() => decreaseItem(product.id)}>
           −
         </Button>
-        <span className="qty-value" aria-live="polite">{quantity}</span>
+        <Text variant="span" className="qty-value" aria-live="polite">{quantity}</Text>
         <Button
           variant="success"
           aria-label="Agregar una unidad"
@@ -46,8 +47,8 @@ function QuantityControl({ product }) {
         >
           +
         </Button>
-      </div>
-    </div>
+      </Text>
+    </Text>
   );
 }
 

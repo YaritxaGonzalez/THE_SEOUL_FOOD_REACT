@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Container, Card, Form, Alert } from 'react-bootstrap';
+import { Container, Card, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../components/atoms/Button';
+import Text from '../components/atoms/Text';
+import RegisterForm from '../components/organisms/RegisterForm';
 import { isValidName, isValidEmail, isValidPhone, isAdminEmail, registerUser, ADMIN_DOMAIN } from '../utils/auth';
-
 function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -69,8 +69,8 @@ function Register() {
   return (
     <Container className="min-vh-100 d-flex align-items-center justify-content-center py-5">
       <Card style={{ maxWidth: '26rem', width: '100%' }} className="p-4">
-        <h1 className="h3">Crear cuenta</h1>
-        <p>Regístrate para pedir tus productos favoritos.</p>
+        <Text variant="h1" className="h3">Crear cuenta</Text>
+        <Text variant="p">Regístrate para pedir tus productos favoritos.</Text>
 
         {success && (
           <Alert variant="success">
@@ -78,94 +78,19 @@ function Register() {
           </Alert>
         )}
 
-        <Form onSubmit={handleSubmit} noValidate>
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="text"
-              name="nombre"
-              placeholder="Nombre de usuario"
-              value={form.nombre}
-              onChange={handleChange}
-              isInvalid={!!errors.nombre}
-              required
-            />
-            <Form.Control.Feedback type="invalid">{errors.nombre}</Form.Control.Feedback>
-          </Form.Group>
+        <RegisterForm
+          form={form}
+          errors={errors}
+          success={success}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+          onBackToLogin={() => navigate('/login')}
+          onGuest={() => navigate('/')}
+        />
 
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="email"
-              name="correo"
-              placeholder="Correo electrónico"
-              value={form.correo}
-              onChange={handleChange}
-              isInvalid={!!errors.correo}
-              required
-            />
-            <Form.Control.Feedback type="invalid">{errors.correo}</Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="tel"
-              name="telefono"
-              placeholder="Teléfono"
-              value={form.telefono}
-              onChange={handleChange}
-              isInvalid={!!errors.telefono}
-              required
-            />
-            <Form.Control.Feedback type="invalid">{errors.telefono}</Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="password"
-              name="pass"
-              placeholder="Contraseña"
-              value={form.pass}
-              onChange={handleChange}
-              isInvalid={!!errors.pass}
-              required
-            />
-            <Form.Control.Feedback type="invalid">{errors.pass}</Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="password"
-              name="confirmarPass"
-              placeholder="Confirmar contraseña"
-              value={form.confirmarPass}
-              onChange={handleChange}
-              isInvalid={!!errors.confirmarPass}
-              required
-            />
-            <Form.Control.Feedback type="invalid">{errors.confirmarPass}</Form.Control.Feedback>
-          </Form.Group>
-
-          <Button type="submit" variant="primary" className="w-100 mb-2" disabled={success}>
-            Registrarse
-          </Button>
-          <Button
-            variant="outline-secondary"
-            className="w-100 mb-2"
-            onClick={() => navigate('/login')}
-          >
-            Volver al inicio de sesión
-          </Button>
-          <Button
-            variant="link"
-            className="w-100"
-            onClick={() => navigate('/')}
-          >
-            Continuar sin registrarme
-          </Button>
-        </Form>
-
-        <p className="mt-3 mb-0">
+        <Text variant="p" className="mt-3 mb-0">
           ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
-        </p>
+        </Text>
       </Card>
     </Container>
   );
