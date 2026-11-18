@@ -1,6 +1,6 @@
-function Text({ children, variant = 'p', className }) {
+function Text({ children, variant = 'p', className, ...props }) {
   const Tag = variant;
-  return <Tag className={className}>{children}</Tag>;
+  return <Tag className={className} {...props}>{children}</Tag>;
 }
 
 export default Text;
