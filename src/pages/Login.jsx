@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Container, Card, Alert } from 'react-bootstrap';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Image from '../components/atoms/Image';
 import Text from '../components/atoms/Text';
 import LoginForm from '../components/organisms/LoginForm';
@@ -8,14 +8,16 @@ import { useAuth } from '../context/AuthContext';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, isLoggedIn, isAdmin, isSeller } = useAuth();
   const [form, setForm] = useState({ correo: '', pass: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Si ya hay sesión, enviar a la página que corresponde a su perfil
-  // (el admin va a /admin, el cliente a la tienda)
+  // Si ya hay sesión, enviar a la página que corresponde a su perfil.
+  // El cliente vuelve a donde estaba (por ejemplo, si venía del carrito).
   if (isLoggedIn) {
-    const destino = isAdmin ? '/admin' : isSeller ? '/orders' : '/';
+    const destino = isAdmin ? '/admin' : isSeller ? '/orders' : location.state?.from ?? '/';
     return <Navigate to={destino} replace />;
   }
 
@@ -23,15 +25,17 @@ function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Sin rol: el sistema detecta solo si la cuenta es admin o cliente
-    const user = login(form.correo.trim().toLowerCase(), form.pass);
-    if (!user) {
-      setError('Correo o contraseña incorrectos.');
-      return;
+    setLoading(true);
+    try {
+      // El rol lo decide el backend según la cuenta
+      await login(form.correo.trim().toLowerCase(), form.pass);
+      setError('');
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
     }
-    setError('');
   };
 
   return (
@@ -49,6 +53,7 @@ function Login() {
 
         <LoginForm
           form={form}
+          loading={loading}
           onChange={handleChange}
           onSubmit={handleSubmit}
           onGuest={() => navigate('/')}

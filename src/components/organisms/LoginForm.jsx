@@ -2,7 +2,7 @@ import { Form } from 'react-bootstrap';
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
 
-function LoginForm({ form, onChange, onSubmit, onGuest }) {
+function LoginForm({ form, loading, onChange, onSubmit, onGuest }) {
   return (
     <Form onSubmit={onSubmit}>
       <Input
@@ -23,8 +23,8 @@ function LoginForm({ form, onChange, onSubmit, onGuest }) {
         onChange={onChange}
         required
       />
-      <Button type="submit" variant="primary" className="w-100 mb-2">
-        Ingresar
+      <Button type="submit" variant="primary" className="w-100 mb-2" disabled={loading}>
+        {loading ? 'Ingresando…' : 'Ingresar'}
       </Button>
       <Button variant="outline-secondary" className="w-100" onClick={onGuest}>
         Continuar sin iniciar sesión

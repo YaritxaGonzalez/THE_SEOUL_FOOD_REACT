@@ -3,7 +3,7 @@ import Input from '../atoms/Input';
 import Text from '../atoms/Text';
 import Button from '../atoms/Button';
 
-function PaymentForm({ form, errors, totalPrice, onChange, onSubmit, onBack }) {
+function PaymentForm({ form, errors, totalPrice, paying, onChange, onSubmit, onBack }) {
   return (
     <Form onSubmit={onSubmit} noValidate>
       <Text variant="p" className="fw-bold">
@@ -52,8 +52,8 @@ function PaymentForm({ form, errors, totalPrice, onChange, onSubmit, onBack }) {
         />
       </Text>
 
-      <Button type="submit" variant="success" className="w-100 mb-2">
-        Pagar
+      <Button type="submit" variant="success" className="w-100 mb-2" disabled={paying}>
+        {paying ? 'Procesando…' : 'Pagar'}
       </Button>
       <Button variant="outline-secondary" className="w-100" onClick={onBack}>
         Volver al carrito

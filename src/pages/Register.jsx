@@ -3,9 +3,15 @@ import { Container, Card, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Text from '../components/atoms/Text';
 import RegisterForm from '../components/organisms/RegisterForm';
-import { isValidName, isValidEmail, isValidPhone, isAdminEmail, registerUser, ADMIN_DOMAIN } from '../utils/auth';
+import { useAuth } from '../context/AuthContext';
+import { isValidName, isValidEmail, isValidPhone, isAdminEmail, ADMIN_DOMAIN } from '../utils/auth';
+
+// El backend nombra los campos distinto que el formulario
+const FIELD_MAP = { email: 'correo', password: 'pass', nombre: 'nombre' };
+
 function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [form, setForm] = useState({
     nombre: '',
     correo: '',
@@ -14,6 +20,8 @@ function Register() {
     confirmarPass: '',
   });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
@@ -33,15 +41,16 @@ function Register() {
     if (!isValidPhone(form.telefono)) {
       errs.telefono = 'Ingresa un teléfono válido (8 a 12 dígitos).';
     }
-    if (form.pass.length < 6) {
-      errs.pass = 'La contraseña debe tener al menos 6 caracteres.';
+    if (form.pass.length < 8) {
+      errs.pass = 'La contraseña debe tener al menos 8 caracteres.';
     }
     if (form.pass !== form.confirmarPass) {
       errs.confirmarPass = 'Las contraseñas no coinciden.';
     }
     return errs;
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
@@ -49,21 +58,35 @@ function Register() {
       return;
     }
 
-    const result = registerUser({
-      nombre: form.nombre.trim(),
-      correo: form.correo.trim().toLowerCase(),
-      telefono: form.telefono.trim(),
-      pass: form.pass,
-    });
-
-    if (!result.ok) {
-      setErrors({ correo: result.error });
-      return;
+    setLoading(true);
+    setSubmitError('');
+    try {
+      // El teléfono se valida arriba, pero el backend no lo guarda: no se envía
+      await register({
+        nombre: form.nombre.trim(),
+        email: form.correo.trim().toLowerCase(),
+        password: form.pass,
+      });
+      setErrors({});
+      setSuccess(true);
+      setTimeout(() => navigate('/login'), 1500);
+    } catch (err) {
+      if (err.fields) {
+        // Validaciones del backend: un mensaje por campo
+        setErrors(
+          Object.fromEntries(
+            Object.entries(err.fields).map(([campo, msg]) => [FIELD_MAP[campo] ?? campo, msg])
+          )
+        );
+      } else if (err.status === 409) {
+        // "El email ya está registrado"
+        setErrors({ correo: err.message });
+      } else {
+        setSubmitError(err.message);
+      }
+    } finally {
+      setLoading(false);
     }
-
-    setErrors({});
-    setSuccess(true);
-    setTimeout(() => navigate('/login'), 1500);
   };
 
   return (
@@ -77,11 +100,13 @@ function Register() {
             ✅ ¡Registro exitoso! Redirigiendo al inicio de sesión...
           </Alert>
         )}
+        {submitError && <Alert variant="danger">{submitError}</Alert>}
 
         <RegisterForm
           form={form}
           errors={errors}
           success={success}
+          loading={loading}
           onChange={handleChange}
           onSubmit={handleSubmit}
           onBackToLogin={() => navigate('/login')}

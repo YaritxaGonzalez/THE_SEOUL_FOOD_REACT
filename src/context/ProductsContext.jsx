@@ -53,7 +53,7 @@ export function ProductsProvider({ children, initialProducts }) {
 
   return (
     <ProductsContext.Provider
-      value={{ products, loading, error, reload, addProduct, updateProduct, deleteProduct }}
+      value={{ products, loading, error, reload, refresh: load, addProduct, updateProduct, deleteProduct }}
     >
       {children}
     </ProductsContext.Provider>

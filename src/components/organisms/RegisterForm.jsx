@@ -10,7 +10,7 @@ const FIELDS = [
   { name: 'confirmarPass', type: 'password', placeholder: 'Confirmar contraseña' },
 ];
 
-function RegisterForm({ form, errors, success, onChange, onSubmit, onBackToLogin, onGuest }) {
+function RegisterForm({ form, errors, success, loading, onChange, onSubmit, onBackToLogin, onGuest }) {
   return (
     <Form onSubmit={onSubmit} noValidate>
       {FIELDS.map(({ name, type, placeholder }) => (
@@ -27,8 +27,8 @@ function RegisterForm({ form, errors, success, onChange, onSubmit, onBackToLogin
         />
       ))}
 
-      <Button type="submit" variant="primary" className="w-100 mb-2" disabled={success}>
-        Registrarse
+      <Button type="submit" variant="primary" className="w-100 mb-2" disabled={success || loading}>
+        {loading ? 'Registrando…' : 'Registrarse'}
       </Button>
       <Button variant="outline-secondary" className="w-100 mb-2" onClick={onBackToLogin}>
         Volver al inicio de sesión
