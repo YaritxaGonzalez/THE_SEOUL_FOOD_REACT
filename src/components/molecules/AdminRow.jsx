@@ -9,7 +9,7 @@ function AdminRow({ product, onSave, onDelete }) {
   const [stock, setStock] = useState(product.stock);
 
   // Valores inválidos: vacío o negativo (no se puede guardar)
-  const priceInvalid = price === '' || Number(price) < 0;
+  const priceInvalid = price === '' || Number(price) <= 0;
   const stockInvalid = stock === '' || Number(stock) < 0;
 
   return (

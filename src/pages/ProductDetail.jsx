@@ -10,8 +10,16 @@ import { useProducts } from '../context/ProductsContext';
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products } = useProducts();
+  const { products, loading } = useProducts();
   const product = products.find((p) => p.id === id);
+
+  if (loading) {
+    return (
+      <Container className="my-5">
+        <Text variant="p" className="text-light">Cargando producto…</Text>
+      </Container>
+    );
+  }
 
   if (!product) {
     return (

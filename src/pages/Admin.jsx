@@ -17,11 +17,11 @@ function Admin() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const image = form.image.trim();
 
-    // Validaciones antes de crear el producto
+    // Validaciones antes de enviar al backend
     if (form.name.trim().length < 2) {
       setError('El nombre del producto debe tener al menos 2 caracteres.');
       return;
@@ -30,30 +30,48 @@ function Admin() {
       setError('Ingresa la ruta de la imagen.');
       return;
     }
-    if (Number(form.price) < 0 || Number(form.stock) < 0) {
-      setError('El precio y el stock no pueden ser negativos.');
+    if (Number(form.price) <= 0) {
+      setError('El precio debe ser mayor a 0.');
+      return;
+    }
+    if (Number(form.stock) < 0) {
+      setError('El stock no puede ser negativo.');
       return;
     }
     setError('');
 
-    addProduct({
-      ...form,
-      name: form.name.trim(),
-      description: form.description.trim(),
-      image: image.startsWith('/') || image.startsWith('http') ? image : '/' + image,
-    });
-    setForm(EMPTY_FORM);
-    setMessage('Producto agregado');
+    try {
+      await addProduct({
+        ...form,
+        name: form.name.trim(),
+        description: form.description.trim(),
+        image: image.startsWith('/') || image.startsWith('http') ? image : '/' + image,
+      });
+      setForm(EMPTY_FORM);
+      setMessage('Producto agregado');
+    } catch (err) {
+      setError(err.message); // por ejemplo: "Ya existe un producto con ese nombre"
+    }
   };
 
-  const handleSave = (id, price, stock) => {
-    updateProduct(id, price, stock);
-    setMessage('Producto actualizado');
+  const handleSave = async (id, price, stock) => {
+    try {
+      await updateProduct(id, price, stock);
+      setError('');
+      setMessage('Producto actualizado');
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm('¿Eliminar este producto?')) {
-      deleteProduct(id);
+  const handleDelete = async (id) => {
+    if (!window.confirm('¿Eliminar este producto?')) return;
+    try {
+      await deleteProduct(id);
+      setError('');
+      setMessage('Producto eliminado');
+    } catch (err) {
+      setError(err.message);
     }
   };
 
