@@ -8,14 +8,15 @@ import { useAuth } from '../context/AuthContext';
 
 function Login() {
   const navigate = useNavigate();
-  const { login, isLoggedIn, isAdmin } = useAuth();
+  const { login, isLoggedIn, isAdmin, isSeller } = useAuth();
   const [form, setForm] = useState({ correo: '', pass: '' });
   const [error, setError] = useState('');
 
   // Si ya hay sesión, enviar a la página que corresponde a su perfil
   // (el admin va a /admin, el cliente a la tienda)
   if (isLoggedIn) {
-    return <Navigate to={isAdmin ? '/admin' : '/'} replace />;
+    const destino = isAdmin ? '/admin' : isSeller ? '/orders' : '/';
+    return <Navigate to={destino} replace />;
   }
 
   const handleChange = (e) => {

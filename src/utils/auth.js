@@ -11,6 +11,13 @@ const ADMINS = [
     rol: 'admin',
     nombre: 'Administrador',
   },
+
+  {
+    user: 'vendedor@theseoulfood.cl',
+    pass: 'Vendedor2026!',
+    rol: 'vendedor',
+    nombre: 'Vendedor',
+  },
   // {
   //   user: 'otro.admin@theseoulfood.cl',
   //   pass: 'OtraClave2026!',

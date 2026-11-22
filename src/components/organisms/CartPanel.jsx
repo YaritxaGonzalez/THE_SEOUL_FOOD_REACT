@@ -5,6 +5,8 @@ import Text from '../atoms/Text';
 import Button from '../atoms/Button';
 import CartItem from '../molecules/CartItem';
 import PaymentForm from './PaymentForm';
+import { useAuth } from '../../context/AuthContext';
+import { createOrder } from '../../services/orderService';
 
 const EMPTY_FORM = { nombre: '', tarjeta: '', vencimiento: '', cvv: '' };
 
@@ -26,6 +28,7 @@ function luhnValido(numero) {
 
 function CartPanel({ show, onHide }) {
   const { items, totalPrice, addToCart, decreaseItem, removeItem, clearCart } = useCart();
+  const { session } = useAuth();
 
   const [step, setStep] = useState('cart'); // 'cart' = carrito, 'payment' = datos de pago
   const [paid, setPaid] = useState(false);  // true = mostrar mensaje de éxito
@@ -72,6 +75,17 @@ function CartPanel({ show, onHide }) {
     setErrors(err);
     if (Object.keys(err).length > 0) return; // si hay errores, NO se paga
 
+    createOrder({
+      customer: session?.user ?? 'Invitado',
+      items: items.map(({ product, quantity }) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity,
+      })),
+      total: totalPrice,
+    });
+    
     // Datos correctos: se completa la transacción
     clearCart();
     setForm(EMPTY_FORM);
