@@ -10,6 +10,7 @@ import AdminRoute from './routes/AdminRoute';
 import Orders from './pages/Orders';
 import OrderDetail from './pages/OrderDetail';
 import RoleRoute from './routes/RoleRoute';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
 
+        <Route path="/profile" element={<RoleRoute roles={['cliente', 'vendedor', 'admin']}><Profile /></RoleRoute>} />
         {/* Solo el administrador */}
         <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
         <Route path="/orders" element={<RoleRoute roles={['admin', 'vendedor']}><Orders /></RoleRoute>} />
