@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { ProductsProvider } from '../context/ProductsContext';
 import { AuthProvider } from '../context/AuthContext';
 import { CartProvider } from '../context/CartContext';
+import productosPrueba from './fixtures/products';
 
 const CORREOS = {
   admin: 'admin@theseoulfood.cl',
@@ -31,7 +32,7 @@ export function seedCart(cart) {
 export function renderApp(ui, { route = '/' } = {}) {
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <ProductsProvider>
+      <ProductsProvider initialProducts={productosPrueba}>
         <AuthProvider>
           <CartProvider>{ui}</CartProvider>
         </AuthProvider>
