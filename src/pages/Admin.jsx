@@ -4,6 +4,7 @@ import { useProducts } from '../context/ProductsContext';
 import Text from '../components/atoms/Text';
 import StockTable from '../components/organisms/StockTable';
 import ProductForm from '../components/organisms/ProductForm';
+import UsersPanel from '../components/organisms/UsersPanel';
 
 const EMPTY_FORM = { name: '', image: '', price: '', stock: '', description: '' };
 
@@ -98,6 +99,10 @@ function Admin() {
 
         <Tab eventKey="producto" title="Producto">
           <ProductForm form={form} onChange={handleChange} onSubmit={handleSubmit} />
+        </Tab>
+
+        <Tab eventKey="usuarios" title="Usuarios" mountOnEnter>
+          <UsersPanel />
         </Tab>
       </Tabs>
     </Container>

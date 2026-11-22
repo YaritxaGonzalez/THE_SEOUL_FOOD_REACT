@@ -9,8 +9,9 @@ import AccountMenu from './AccountMenu';
 
 function NavBar() {
   const { totalItems, showCart, openCart, closeCart } = useCart();
-  const { isAdmin, isSeller } = useAuth(); // el admin no compra, así que no ve el carrito
-  const canBuy = !isAdmin && !isSeller; // solo el cliente (o visitante) compraconst canBuy = !isAdmin && !isSeller; // solo el cliente (o visitante) compra
+  const { isAdmin, isSeller } = useAuth(); // el admin y el vendedor no compran, así que no ven el carrito
+  const canBuy = !isAdmin && !isSeller; // solo el cliente (o visitante) compra
+
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">

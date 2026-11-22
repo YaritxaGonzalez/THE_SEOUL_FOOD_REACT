@@ -1,6 +1,7 @@
 import { API_URL } from './config';
 
 const AUTH_KEY = 'seoulfood_auth';
+export const AUTH_CLEARED_EVENT = 'seoulfood:auth-cleared';
 
 export function getAuth() {
   try {
@@ -14,6 +15,7 @@ export function saveAuth(data) {
 }
 export function clearAuth() {
   sessionStorage.removeItem(AUTH_KEY);
+  window.dispatchEvent(new Event(AUTH_CLEARED_EVENT));
 }
 
 export class ApiError extends Error {
@@ -26,6 +28,7 @@ export class ApiError extends Error {
 
 // El backend responde { error: "mensaje" } o { campo: "mensaje" } (validaciones)
 function toApiError(status, body) {
+  if (status === 403) return new ApiError(status, 'No tienes permiso para realizar esta acción');
   if (body?.error) return new ApiError(status, body.error);
   if (body && typeof body === 'object') {
     return new ApiError(status, Object.values(body).join(' '), body);

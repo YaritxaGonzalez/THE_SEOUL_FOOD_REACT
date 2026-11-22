@@ -7,6 +7,8 @@ import CartItem from '../molecules/CartItem';
 import PaymentForm from './PaymentForm';
 import { useAuth } from '../../context/AuthContext';
 import { createOrder } from '../../services/orderService';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useProducts } from '../../context/ProductsContext';
 
 const EMPTY_FORM = { nombre: '', tarjeta: '', vencimiento: '', cvv: '' };
 
@@ -28,12 +30,17 @@ function luhnValido(numero) {
 
 function CartPanel({ show, onHide }) {
   const { items, totalPrice, addToCart, decreaseItem, removeItem, clearCart } = useCart();
-  const { session } = useAuth();
+  const { session, isLoggedIn } = useAuth();
+  const { refresh } = useProducts();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [step, setStep] = useState('cart'); // 'cart' = carrito, 'payment' = datos de pago
   const [paid, setPaid] = useState(false);  // true = mostrar mensaje de éxito
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,29 +75,36 @@ function CartPanel({ show, onHide }) {
     return err;
   };
 
-  const handlePay = (e) => {
+  const handlePay = async (e) => {
     e.preventDefault();
-    if (items.length === 0) return; // no se puede pagar con el carrito vacío
+    if (paying || !isLoggedIn || items.length === 0) return;
     const err = validate();
     setErrors(err);
     if (Object.keys(err).length > 0) return; // si hay errores, NO se paga
 
-    createOrder({
-      customer: session?.user ?? 'Invitado',
-      items: items.map(({ product, quantity }) => ({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        quantity,
-      })),
-      total: totalPrice,
-    });
-    
-    // Datos correctos: se completa la transacción
+    setPaying(true);
+    setPayError('');
+    try {
+      await createOrder(items);
+    } catch (error) {
+      setPayError(
+        error.status === 401
+          ? 'Tu sesión expiró. Inicia sesión nuevamente para pagar.'
+          : error.message
+      );
+      // Stock insuficiente: se refrescan los productos para que el carrito se ajuste
+      if (error.status === 409) refresh();
+      setPaying(false);
+      return;
+    }
+
+    // Orden creada: el backend ya descontó el stock
+    setPaying(false);
     clearCart();
     setForm(EMPTY_FORM);
     setStep('cart');
     setPaid(true);
+    refresh();
   };
 
   // Al cerrar el panel se reinicia todo
@@ -99,7 +113,18 @@ function CartPanel({ show, onHide }) {
     setStep('cart');
     setForm(EMPTY_FORM);
     setErrors({});
+    setPayError('');
     onHide();
+  };
+
+  const handleGoToPay = () => {
+    if (!isLoggedIn) {
+      handleHide();
+      navigate('/login', { state: { from: location.pathname } });
+      return;
+    }
+    setPaid(false);
+    setStep('payment');
   };
 
   return (
@@ -140,23 +165,32 @@ function CartPanel({ show, onHide }) {
               variant="success"
               className="w-100 mt-3"
               disabled={items.length === 0}
-              onClick={() => { setPaid(false); setStep('payment'); }}
+              onClick={handleGoToPay}
             >
               Ir a pagar
             </Button>
+            {!isLoggedIn && items.length > 0 && (
+              <Text variant="p" className="small text-muted mt-2 mb-0">
+                Para continuar con el pago, primero debes iniciar sesión.
+              </Text>
+            )}
           </>
         )}
 
         {step === 'payment' && (
-          <PaymentForm
-            form={form}
-            errors={errors}
-            totalPrice={totalPrice}
-            onChange={handleChange}
-            onSubmit={handlePay}
-            onBack={() => setStep('cart')}
-          />
-        )}
+          <>
+            {payError && <Alert variant="danger">{payError}</Alert>}
+            <PaymentForm
+              form={form}
+              errors={errors}
+              totalPrice={totalPrice}
+              paying={paying}
+              onChange={handleChange}
+              onSubmit={handlePay}
+              onBack={() => { setPayError(''); setStep('cart'); }}
+            />
+          </>
+    )}
       </Offcanvas.Body>
     </Offcanvas>
   );
