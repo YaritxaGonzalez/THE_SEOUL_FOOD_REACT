@@ -29,6 +29,9 @@ const label = isLoggedIn ? '👤 Mi cuenta' : '👤 Cuenta';
               <Text variant="strong" className="text-light">{session.user}</Text>
             </NavDropdown.ItemText>
             <NavDropdown.Divider />
+              <NavDropdown.Item as={Link} to="/profile">
+                👤 Mi perfil
+              </NavDropdown.Item>
             {isAdmin && (
               <NavDropdown.Item as={Link} to="/admin">
                 ⚙️ Panel de administración

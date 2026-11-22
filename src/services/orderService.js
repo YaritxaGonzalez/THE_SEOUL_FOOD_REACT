@@ -56,3 +56,8 @@ export async function createOrder(items) {
 export async function updateOrderStatus(id, estado) {
   return toOrder(await api.put(`/ordenes/${id}/estado`, { estado }));
 }
+
+export async function getMyOrders() {
+  const list = await api.get('/ordenes/mias');
+  return list.map(toOrder);
+}
