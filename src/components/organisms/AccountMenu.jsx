@@ -16,8 +16,7 @@ function AccountMenu() {
     navigate('/');
   };
 
-  // DESPUÉS
-const label = isLoggedIn ? '👤 Mi cuenta' : '👤 Cuenta';
+  const label = isLoggedIn ? '👤 Mi cuenta' : '👤 Cuenta';
   return (
     <>
       <NavDropdown title={label} id="account-dropdown" align="end" menuVariant="dark">
@@ -25,13 +24,13 @@ const label = isLoggedIn ? '👤 Mi cuenta' : '👤 Cuenta';
           <>
             <NavDropdown.ItemText className="small text-secondary">
               Sesión iniciada como
-              <br />
+              <Text variant="br" />
               <Text variant="strong" className="text-light">{session.user}</Text>
             </NavDropdown.ItemText>
             <NavDropdown.Divider />
-              <NavDropdown.Item as={Link} to="/profile">
-                👤 Mi perfil
-              </NavDropdown.Item>
+            <NavDropdown.Item as={Link} to="/profile">
+              👤 Mi perfil
+            </NavDropdown.Item>
             {isAdmin && (
               <NavDropdown.Item as={Link} to="/admin">
                 ⚙️ Panel de administración

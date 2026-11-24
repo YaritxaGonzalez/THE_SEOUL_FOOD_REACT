@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Container, Alert, Form } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import Text from '../components/atoms/Text';
 import Button from '../components/atoms/Button';
+import Select from '../components/atoms/Select';
 import OrderDetailCard from '../components/organisms/OrderDetailCard';
 import { useAuth } from '../context/AuthContext';
 import { useProducts } from '../context/ProductsContext';
@@ -116,17 +117,14 @@ function OrderDetail() {
             Una orden cancelada no puede cambiar de estado.
           </Text>
         ) : (
-          <div className="d-flex flex-wrap gap-2 align-items-center mt-3">
-            <Form.Select
+          <Text variant="div" className="d-flex flex-wrap gap-2 align-items-center mt-3">
+            <Select
               aria-label="Nuevo estado"
               style={{ maxWidth: '14rem' }}
               value={newStatus}
               onChange={(e) => setNewStatus(e.target.value)}
-            >
-              {ORDER_STATES.map((s) => (
-                <option key={s.value} value={s.value}>{s.label}</option>
-              ))}
-            </Form.Select>
+              options={ORDER_STATES}
+            />
             <Button
               variant="success"
               disabled={saving || newStatus === order.statusCode}
@@ -134,7 +132,7 @@ function OrderDetail() {
             >
               {saving ? 'Guardando…' : 'Actualizar estado'}
             </Button>
-          </div>
+          </Text>
         ))}
 
       {volver}

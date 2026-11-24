@@ -7,6 +7,7 @@ import Table from '../atoms/Table';
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
 import Text from '../atoms/Text';
+import Select from '../atoms/Select';
 
 const EMPTY_FORM = { nombre: '', email: '', password: '', rol: 'VENDEDOR' };
 
@@ -125,18 +126,15 @@ function UsersPanel() {
                   <Table.Cell>{u.nombre}</Table.Cell>
                   <Table.Cell>{u.email}</Table.Cell>
                   <Table.Cell>
-                    <Form.Select
+                    <Select
                       size="sm"
                       aria-label={`Rol de ${u.email}`}
                       value={u.rol}
                       disabled={isSelf}
                       title={isSelf ? 'No puedes modificar tu propia cuenta' : undefined}
                       onChange={(e) => handleRole(u, e.target.value)}
-                    >
-                      {userService.ROLES.map((r) => (
-                        <option key={r.value} value={r.value}>{r.label}</option>
-                      ))}
-                    </Form.Select>
+                      options={userService.ROLES}
+                    />
                   </Table.Cell>
                   <Table.Cell>{u.activo ? 'Activo' : 'Inactivo'}</Table.Cell>
                   <Table.Cell>
@@ -162,17 +160,14 @@ function UsersPanel() {
         <Input className="mb-3" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleChange} />
         <Input className="mb-3" type="email" name="email" placeholder="Correo electrónico" value={form.email} onChange={handleChange} />
         <Input className="mb-3" type="password" name="password" placeholder="Contraseña (mínimo 8 caracteres)" value={form.password} onChange={handleChange} />
-        <Form.Select
+        <Select
           className="mb-3"
           name="rol"
           aria-label="Rol del nuevo usuario"
           value={form.rol}
           onChange={handleChange}
-        >
-          {userService.ROLES.map((r) => (
-            <option key={r.value} value={r.value}>{r.label}</option>
-          ))}
-        </Form.Select>
+          options={userService.ROLES}
+        />
         <Button type="submit" variant="primary" disabled={saving}>
           {saving ? 'Creando…' : 'Crear usuario'}
         </Button>
