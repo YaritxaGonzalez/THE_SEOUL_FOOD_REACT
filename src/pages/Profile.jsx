@@ -35,13 +35,13 @@ function Profile() {
       <Card className="mb-4">
         <Card.Body>
           <Text variant="p" className="mb-1">
-            <strong>Nombre:</strong> {session.nombre}
+            <Text variant="strong">Nombre:</Text> {session.nombre}
           </Text>
           <Text variant="p" className="mb-1">
-            <strong>Correo:</strong> {session.user}
+            <Text variant="strong">Correo:</Text> {session.user}
           </Text>
           <Text variant="p" className="mb-0">
-            <strong>Rol:</strong> {ROL_LABEL[session.rol] ?? session.rol}
+            <Text variant="strong">Rol:</Text> {ROL_LABEL[session.rol] ?? session.rol}
           </Text>
         </Card.Body>
       </Card>
@@ -58,13 +58,13 @@ function Profile() {
         orders.map((order) => (
           <Card key={order.id} className="mb-3">
             <Card.Header className="d-flex justify-content-between flex-wrap gap-2">
-              <span>
-                <strong>Pedido #{order.id}</strong> ·{' '}
+              <Text variant="span">
+                <Text variant="strong">Pedido #{order.id}</Text> ·{' '}
                 {new Date(order.date).toLocaleString('es-CL')}
-              </span>
-              <span>
-                {order.status} · <strong>${order.total.toLocaleString('es-CL')}</strong>
-              </span>
+              </Text>
+              <Text variant="span">
+                {order.status} · <Text variant="strong">${order.total.toLocaleString('es-CL')}</Text>
+              </Text>
             </Card.Header>
             <Card.Body>
               <Table responsive size="sm" className="mb-0 align-middle">

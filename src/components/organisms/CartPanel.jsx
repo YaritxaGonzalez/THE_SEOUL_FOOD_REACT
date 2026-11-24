@@ -154,7 +154,7 @@ function CartPanel({ show, onHide }) {
                 ))}
               </ListGroup>
             )}
-            <hr />
+            <Text variant="hr" />
             <Text variant="div" className="d-flex justify-content-between fw-bold">
               <Text variant="span">Total:</Text>
               <Text variant="span">${totalPrice.toLocaleString('es-CL')}</Text>
@@ -190,7 +190,7 @@ function CartPanel({ show, onHide }) {
               onBack={() => { setPayError(''); setStep('cart'); }}
             />
           </>
-    )}
+        )}
       </Offcanvas.Body>
     </Offcanvas>
   );
