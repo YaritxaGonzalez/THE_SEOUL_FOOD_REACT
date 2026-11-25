@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import MainLayout from './components/templates/MainLayout';
+import MatrixBackground from './components/organisms/MatrixBackground';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
@@ -14,24 +15,29 @@ import Profile from './pages/Profile';
 
 function App() {
   return (
-    <Routes>
-      {/* Pantallas de acceso (opcionales) */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+    <>
+      {/* Fondo neón compartido por todas las páginas (tienda, login y registro) */}
+      <MatrixBackground />
 
-      {/* Tienda pública: se puede ver sin cuenta */}
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
+      <Routes>
+        {/* Pantallas de acceso (opcionales) */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        <Route path="/profile" element={<RoleRoute roles={['cliente', 'vendedor', 'admin']}><Profile /></RoleRoute>} />
-        {/* Solo el administrador */}
-        <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
-        <Route path="/orders" element={<RoleRoute roles={['admin', 'vendedor']}><Orders /></RoleRoute>} />
-        <Route path="/orders/:id" element={<RoleRoute roles={['admin', 'vendedor']}><OrderDetail /></RoleRoute>} />
-      </Route>
-    </Routes>
+        {/* Tienda pública: se puede ver sin cuenta */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetail />} />
+
+          <Route path="/profile" element={<RoleRoute roles={['cliente', 'vendedor', 'admin']}><Profile /></RoleRoute>} />
+          {/* Solo el administrador */}
+          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+          <Route path="/orders" element={<RoleRoute roles={['admin', 'vendedor']}><Orders /></RoleRoute>} />
+          <Route path="/orders/:id" element={<RoleRoute roles={['admin', 'vendedor']}><OrderDetail /></RoleRoute>} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 
